@@ -2,7 +2,7 @@
 name = "boingboingboing"
 version = "0.1.0"
 edition = "2021"
-license = "BSD 2-Clause"
+license = "BSD-2-Clause"
 description = "Audio DSP library for musical applications"
 homepage = "https://paulbatchelor.github.io/proj/boing"
 repository = "https://github.com/paulbatchelor/boing"
