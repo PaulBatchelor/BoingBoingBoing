@@ -21,12 +21,12 @@ fn polyblep(dt: f32, t: f32) -> f32 {
         return t * t + t + t + 1.0;
     }
 
-    return 0.0;
+    0.0
 }
 
 impl BLEP {
     pub fn new(sr: usize) -> Self {
-        let blep = BLEP {
+        BLEP {
             freq:  1000.0,
             pfreq: -1.0,
             onedsr: 1.0 / sr as f32,
@@ -37,9 +37,7 @@ impl BLEP {
             // r: (-1.0 / (0.0025 * sr as f32)).exp(),
             // x: 0.0,
             // y: 0.0,
-        };
-
-        blep
+        }
     }
 
     pub fn set_freq(&mut self, f: f32) {
