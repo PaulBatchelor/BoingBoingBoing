@@ -2,5 +2,10 @@
 name = "boing"
 version = "0.1.0"
 edition = "2021"
+license = "BSD 2-Clause"
+description = "Audio DSP library for musical applications"
+homepage = "https://paulbatchelor.github.io/proj/boing"
+repository = "https://github.com/paulbatchelor/boing"
+readme = "README.md"
 
 [dependencies]
