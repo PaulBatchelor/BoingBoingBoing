@@ -2,7 +2,7 @@
 // convert to WAV using SoX:
 // sox -t raw -r 44100 -e floating-point -c 1 -b 32 test.bin test.wav
 
-extern crate boing;
+extern crate boingboingboing as boing;
 use std::fs::File;
 use std::io::prelude::*;
 
