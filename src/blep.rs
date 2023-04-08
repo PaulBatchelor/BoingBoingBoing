@@ -44,33 +44,6 @@ impl BLEP {
         self.freq = f;
     }
 
-// static SKFLT blep_saw(sk_blep *blep, SKFLT t)
-// {
-//     SKFLT value;
-// 
-//     value = (2.0 * t) - 1.0;
-//     value -= polyblep(blep->inc, t);
-// 
-//     return value;
-// }
-//
-//     SKFLT out;
-// 
-//     out = 0.0;
-// 
-// if (blep->freq != blep->pfreq) {
-//     blep->pfreq = blep->freq;
-//     blep->inc = blep->freq * blep->onedsr;
-// }
-// out = wave(blep, blep->phs);
-// blep->phs += blep->inc;
-// 
-// if (blep->phs > 1.0) {
-//     blep->phs -= 1.0;
-// }
-
-//
-
     pub fn saw(&mut self) -> f32 {
         let mut x;
         if self.freq != self.pfreq {
@@ -81,6 +54,33 @@ impl BLEP {
         let phs = self.phs;
         x = (2.0  * phs) - 1.0;
         x -= polyblep(self.inc, phs);
+        let out = x;
+
+        self.phs += self.inc;
+        if self.phs > 1.0 {
+            self.phs -= 1.0;
+        }
+
+        out
+    }
+
+    pub fn square(&mut self) -> f32 {
+        if self.freq != self.pfreq {
+            self.pfreq = self.freq;
+            self.inc = self.freq * self.onedsr;
+        }
+
+        let phs = self.phs;
+
+        let mut x;
+        if phs < 0.5 {
+            x = 1.0;
+        } else {
+            x = -1.0;
+        }
+        
+        x += polyblep(self.inc, phs);
+        x -= polyblep(self.inc, (phs + 0.5) % 1.0);
         let out = x;
 
         self.phs += self.inc;
