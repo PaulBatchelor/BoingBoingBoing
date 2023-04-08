@@ -4,11 +4,10 @@ pub struct BLEP {
     onedsr: f32,
     inc: f32,
     phs: f32,
-    //a: f32,
-    //prev: f32,
-    //r: f32,
-    //x: f32,
-    //y: f32,
+    prev: f32,
+    r: f32,
+    x: f32,
+    y: f32,
 }
 
 fn polyblep(dt: f32, t: f32) -> f32 {
@@ -32,11 +31,10 @@ impl BLEP {
             onedsr: 1.0 / sr as f32,
             inc: 0.0,
             phs: 0.0,
-            // a: (-1.0 / (0.1 * sr as f32)).exp(),
-            // prev: 0.0,
-            // r: (-1.0 / (0.0025 * sr as f32)).exp(),
-            // x: 0.0,
-            // y: 0.0,
+            prev: 0.0,
+            r: (-1.0 / (0.0025 * sr as f32)).exp(),
+            x: 0.0,
+            y: 0.0,
         }
     }
 
@@ -82,6 +80,48 @@ impl BLEP {
         x += polyblep(self.inc, phs);
         x -= polyblep(self.inc, (phs + 0.5) % 1.0);
         let out = x;
+
+        self.phs += self.inc;
+        if self.phs > 1.0 {
+            self.phs -= 1.0;
+        }
+
+        out
+    }
+
+    pub fn triangle(&mut self) -> f32 {
+        if self.freq != self.pfreq {
+            self.pfreq = self.freq;
+            self.inc = self.freq * self.onedsr;
+        }
+
+        let phs = self.phs;
+
+        let mut x;
+        if phs < 0.5 {
+            x = 1.0;
+        } else {
+            x = -1.0;
+        }
+       
+        // compute square
+        x += polyblep(self.inc, phs);
+        x -= polyblep(self.inc, (phs + 0.5) % 1.0);
+
+        // scale and integrate
+        if self.freq != 0.0 {
+            x *= 4.0 / self.freq; 
+        } else {
+            x = 0.0;
+        }
+        x += self.prev;
+        self.prev = x;
+
+        // dc blocker
+        self.y = x - self.x + self.r*self.y;
+        self.x = x;
+
+        let out = self.y * 0.8;
 
         self.phs += self.inc;
         if self.phs > 1.0 {
