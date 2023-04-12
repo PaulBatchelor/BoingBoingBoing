@@ -3,6 +3,7 @@
 
 use std::f32::consts::PI;
 
+#[derive(Clone, Copy)]
 pub struct MagicCircleSine {
     freq: f32,
     pfreq: f32,
@@ -31,7 +32,8 @@ impl MagicCircleSine {
     pub fn tick(&mut self) -> f32 {
         if self.pfreq != self.freq {
             self.pfreq = self.freq;
-            self.eps = 2.0 * (PI * (self.freq / self.sr as f32)).sin();
+            self.eps = 2.0 *
+                (PI * (self.freq / self.sr as f32)).sin();
         }
 
         self.x1 = self.x1 + self.eps*self.x2;

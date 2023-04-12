@@ -1,10 +1,12 @@
 use std::f32::consts::PI;
 
+#[derive(Clone, Copy)]
 pub struct ButterworthFilter {
     pidsr: f32,
     a: [f32; 64],
 }
 
+#[derive(Clone, Copy)]
 pub struct ButterworthLowPass {
     freq: f32,
     pfreq: f32,

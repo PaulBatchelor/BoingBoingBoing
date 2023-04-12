@@ -1,3 +1,4 @@
+#[derive(Clone, Copy)]
 pub struct BLEP {
     freq: f32,
     pfreq: f32,
