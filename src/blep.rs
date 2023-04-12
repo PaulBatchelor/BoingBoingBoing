@@ -76,7 +76,7 @@ impl BLEP {
         } else {
             x = -1.0;
         }
-        
+
         x += polyblep(self.inc, phs);
         x -= polyblep(self.inc, (phs + 0.5) % 1.0);
         let out = x;
@@ -103,7 +103,7 @@ impl BLEP {
         } else {
             x = -1.0;
         }
-       
+
         // compute square
         x += polyblep(self.inc, phs);
         x -= polyblep(self.inc, (phs + 0.5) % 1.0);
