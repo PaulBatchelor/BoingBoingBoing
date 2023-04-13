@@ -61,6 +61,8 @@ impl Voice {
 fn main() {
     let base = 60.0 - 4.0;
     let mut voices: [Voice; 6] = [Voice::new(SAMPLERATE); 6];
+    let mut bigverb =  boing::bigverb(SAMPLERATE);
+    bigverb.init();
 
     let mut blk: [f32; 64] = [0.0; 64];
     let mut bytes: [u8; 256] = [0; 256];
@@ -101,7 +103,8 @@ fn main() {
             for v in 0..6 {
                 out += voices[v].tick();
             }
-            blk[n] = out;
+            let (revl, _) = bigverb.tick(out, out);
+            blk[n] = out + revl * 0.2;
         }
 
         for n in 0..64 {
