@@ -1,7 +1,7 @@
+pub mod bigverb;
 pub mod blep;
 pub mod butterworth;
 pub mod magic_circle;
-pub mod bigverb;
 
 pub fn blep(sr: usize) -> blep::BLEP {
     blep::BLEP::new(sr)

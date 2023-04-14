@@ -13,14 +13,54 @@ struct ParamSet {
 }
 
 const PARAMS: [ParamSet; 8] = [
-     ParamSet {delay:0x09a9, drift:0x0a, randfreq:0xc1c, seed:0x07ae},
-     ParamSet {delay:0x0acf, drift:0x0b, randfreq:0xdac, seed:0x7333},
-     ParamSet {delay:0x0c91, drift:0x11, randfreq:0x456, seed:0x5999},
-     ParamSet {delay:0x0de5, drift:0x06, randfreq:0xf85, seed:0x2666},
-     ParamSet {delay:0x0f43, drift:0x0a, randfreq:0x925, seed:0x50a3},
-     ParamSet {delay:0x101f, drift:0x0b, randfreq:0x769, seed:0x5999},
-     ParamSet {delay:0x085f, drift:0x11, randfreq:0x37b, seed:0x7333},
-     ParamSet {delay:0x078d, drift:0x06, randfreq:0xc95, seed:0x3851},
+    ParamSet {
+        delay: 0x09a9,
+        drift: 0x0a,
+        randfreq: 0xc1c,
+        seed: 0x07ae,
+    },
+    ParamSet {
+        delay: 0x0acf,
+        drift: 0x0b,
+        randfreq: 0xdac,
+        seed: 0x7333,
+    },
+    ParamSet {
+        delay: 0x0c91,
+        drift: 0x11,
+        randfreq: 0x456,
+        seed: 0x5999,
+    },
+    ParamSet {
+        delay: 0x0de5,
+        drift: 0x06,
+        randfreq: 0xf85,
+        seed: 0x2666,
+    },
+    ParamSet {
+        delay: 0x0f43,
+        drift: 0x0a,
+        randfreq: 0x925,
+        seed: 0x50a3,
+    },
+    ParamSet {
+        delay: 0x101f,
+        drift: 0x0b,
+        randfreq: 0x769,
+        seed: 0x5999,
+    },
+    ParamSet {
+        delay: 0x085f,
+        drift: 0x11,
+        randfreq: 0x37b,
+        seed: 0x7333,
+    },
+    ParamSet {
+        delay: 0x078d,
+        drift: 0x06,
+        randfreq: 0xc95,
+        seed: 0x3851,
+    },
 ];
 
 const FRACSCALE: u32 = 0x10000000;
@@ -54,10 +94,8 @@ pub struct BigVerb {
 }
 
 fn get_delay_size(p: &ParamSet, sr: usize) -> usize {
-    let sz =
-        p.delay as f32 /44100.0 +
-        (p.drift as f32 * 0.0001) * 1.125;
-    (16.0 + sz*sr as f32).floor() as usize
+    let sz = p.delay as f32 / 44100.0 + (p.drift as f32 * 0.0001) * 1.125;
+    (16.0 + sz * sr as f32).floor() as usize
 }
 
 impl BigVerbDelay {
@@ -80,9 +118,7 @@ impl BigVerbDelay {
 
     pub fn init(&mut self, bufstart: usize, sz: usize, p: &ParamSet, sr: usize) {
         let readpos = p.delay as f32 / 44100.0;
-        let readpos =
-            readpos +
-            p.seed as f32 * (p.drift as f32 * 0.0001) / 32768.0;
+        let readpos = readpos + p.seed as f32 * (p.drift as f32 * 0.0001) / 32768.0;
         let readpos = (sz as f32 - (readpos * sr as f32)).floor();
 
         self.bufstart = bufstart;
@@ -105,7 +141,7 @@ impl BigVerbDelay {
             self.rng += 0x10000;
         }
 
-        self.rng = 1 + self.rng*0x3d09;
+        self.rng = 1 + self.rng * 0x3d09;
         self.rng &= 0xFFFF;
 
         if self.rng >= 0x8000 {
@@ -114,8 +150,8 @@ impl BigVerbDelay {
 
         self.counter = self.maxcount;
 
-        let mut curdel = self.wpos as f32 -
-            (self.irpos as f32 + (self.frpos as f32 / FRACSCALE as f32));
+        let mut curdel =
+            self.wpos as f32 - (self.irpos as f32 + (self.frpos as f32 / FRACSCALE as f32));
 
         while curdel < 0.0 {
             curdel += self.sz as f32;
@@ -123,10 +159,9 @@ impl BigVerbDelay {
 
         curdel /= sr as f32;
 
-        let nxtdel =
-            (self.rng as f32 * (self.drift * 0.0001) / 32768.0) + self.dels;
+        let nxtdel = (self.rng as f32 * (self.drift * 0.0001) / 32768.0) + self.dels;
 
-        let inc = ((curdel - nxtdel) / self.counter as f32)*sr as f32;
+        let inc = ((curdel - nxtdel) / self.counter as f32) * sr as f32;
         let inc = inc + 1.0;
         self.inc = (inc * FRACSCALE as f32).floor() as i32;
     }
@@ -177,9 +212,9 @@ impl BigVerbDelay {
             }
         }
 
-        let out = (a*s[0] + b*s[1] + c*s[2] + d*s[3]) * frac_norm + s[1];
+        let out = (a * s[0] + b * s[1] + c * s[2] + d * s[3]) * frac_norm + s[1];
         self.frpos += self.inc;
-        let out =  out * fdbk;
+        let out = out * fdbk;
         let out = out + (self.y - out) * filt;
         self.y = out;
         self.counter -= 1;
@@ -221,7 +256,6 @@ impl BigVerb {
     }
 
     pub fn tick(&mut self, in_l: f32, in_r: f32) -> (f32, f32) {
-
         if self.pcutoff != self.cutoff {
             self.pcutoff = self.cutoff;
             //bv->filt = 2.0 - cos(bv->pcutoff * 2 * M_PI / bv->sr);
@@ -246,18 +280,9 @@ impl BigVerb {
 
         for i in 0..8 {
             if (i & 1) > 0 {
-                rsum += self.delay[i].tick(&mut self.buf,
-                                           in_r,
-                                           self.size,
-                                           self.filt,
-                                           self.sr);
+                rsum += self.delay[i].tick(&mut self.buf, in_r, self.size, self.filt, self.sr);
             } else {
-                lsum += self.delay[i].tick(&mut self.buf,
-                                           in_l,
-                                           self.size,
-                                           self.filt,
-                                           self.sr);
-
+                lsum += self.delay[i].tick(&mut self.buf, in_l, self.size, self.filt, self.sr);
             }
         }
         rsum *= 0.35;

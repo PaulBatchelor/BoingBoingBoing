@@ -12,7 +12,6 @@ pub struct BLEP {
 }
 
 fn polyblep(dt: f32, t: f32) -> f32 {
-
     if t < dt {
         let t = t / dt;
         return t + t - t * t - 1.0;
@@ -27,7 +26,7 @@ fn polyblep(dt: f32, t: f32) -> f32 {
 impl BLEP {
     pub fn new(sr: usize) -> Self {
         BLEP {
-            freq:  1000.0,
+            freq: 1000.0,
             pfreq: -1.0,
             onedsr: 1.0 / sr as f32,
             inc: 0.0,
@@ -51,7 +50,7 @@ impl BLEP {
         }
 
         let phs = self.phs;
-        x = (2.0  * phs) - 1.0;
+        x = (2.0 * phs) - 1.0;
         x -= polyblep(self.inc, phs);
         let out = x;
 
@@ -111,7 +110,7 @@ impl BLEP {
 
         // scale and integrate
         if self.freq != 0.0 {
-            x *= 4.0 / self.freq; 
+            x *= 4.0 / self.freq;
         } else {
             x = 0.0;
         }
@@ -119,7 +118,7 @@ impl BLEP {
         self.prev = x;
 
         // dc blocker
-        self.y = x - self.x + self.r*self.y;
+        self.y = x - self.x + self.r * self.y;
         self.x = x;
 
         let out = self.y * 0.8;

@@ -24,8 +24,8 @@ impl ButterworthFilter {
 
     fn filter(&mut self, insig: f32) -> f32 {
         let a = &mut self.a;
-        let t = insig - a[3]*a[5] - a[4]*a[6];
-        let y = t*a[0] + a[1]*a[5] + a[2]*a[6];
+        let t = insig - a[3] * a[5] - a[4] * a[6];
+        let y = t * a[0] + a[1] * a[5] + a[2] * a[6];
         a[6] = a[5];
         a[5] = t;
         y
@@ -35,7 +35,7 @@ impl ButterworthFilter {
 impl ButterworthLowPass {
     pub fn new(sr: usize) -> Self {
         ButterworthLowPass {
-            freq:  1000.0,
+            freq: 1000.0,
             pfreq: -1.0,
             butter: ButterworthFilter::new(sr),
         }
@@ -53,11 +53,11 @@ impl ButterworthLowPass {
             // derive c constant for BLT
             let c = 1.0 / (self.freq * self.butter.pidsr).tan();
 
-            a[0] = 1.0 / (1.0 + c*SQRT_2 + c*c);
+            a[0] = 1.0 / (1.0 + c * SQRT_2 + c * c);
             a[1] = 2.0 * a[0];
             a[2] = a[0];
-            a[3] = 2.0 * (1.0 - c*c) * a[0];
-            a[4] = (1.0 - c*SQRT_2 + c*c) * a[0];
+            a[3] = 2.0 * (1.0 - c * c) * a[0];
+            a[4] = (1.0 - c * SQRT_2 + c * c) * a[0];
         }
 
         self.butter.filter(insig)

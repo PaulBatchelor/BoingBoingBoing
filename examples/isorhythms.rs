@@ -55,7 +55,6 @@ impl Voice {
         let smp = self.lpf.tick(smp);
         return smp * 0.3 * s;
     }
-
 }
 
 fn main() {
@@ -78,7 +77,7 @@ fn main() {
     voices[1].pitch(base + 11.0);
     voices[1].rate(1.0 / 9.0);
     voices[1].phase(0.1);
-    
+
     voices[2].init();
     voices[2].pitch(base + 7.0);
     voices[2].rate(1.0 / 7.0);
