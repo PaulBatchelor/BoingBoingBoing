@@ -1,4 +1,5 @@
 use std::f32::consts::PI;
+use std::f32::consts::SQRT_2;
 
 #[derive(Clone, Copy)]
 pub struct ButterworthFilter {
@@ -12,8 +13,6 @@ pub struct ButterworthLowPass {
     pfreq: f32,
     butter: ButterworthFilter,
 }
-
-const ROOT2: f32 = 1.4142135623730950488;
 
 impl ButterworthFilter {
     pub fn new(sr: usize) -> Self {
@@ -54,11 +53,11 @@ impl ButterworthLowPass {
             // derive c constant for BLT
             let c = 1.0 / (self.freq * self.butter.pidsr).tan();
 
-            a[0] = 1.0 / (1.0 + c*ROOT2 + c*c);
+            a[0] = 1.0 / (1.0 + c*SQRT_2 + c*c);
             a[1] = 2.0 * a[0];
             a[2] = a[0];
             a[3] = 2.0 * (1.0 - c*c) * a[0];
-            a[4] = (1.0 - c*ROOT2 + c*c) * a[0];
+            a[4] = (1.0 - c*SQRT_2 + c*c) * a[0];
         }
 
         self.butter.filter(insig)

@@ -57,7 +57,7 @@ fn get_delay_size(p: &ParamSet, sr: usize) -> usize {
     let sz =
         p.delay as f32 /44100.0 +
         (p.drift as f32 * 0.0001) * 1.125;
-    return (16.0 + sz*sr as f32).floor() as usize;
+    (16.0 + sz*sr as f32).floor() as usize
 }
 
 impl BigVerbDelay {
@@ -124,7 +124,7 @@ impl BigVerbDelay {
         curdel /= sr as f32;
 
         let nxtdel =
-            (self.rng as f32 * (self.drift as f32 * 0.0001) / 32768.0) + self.dels;
+            (self.rng as f32 * (self.drift * 0.0001) / 32768.0) + self.dels;
 
         let inc = ((curdel - nxtdel) / self.counter as f32)*sr as f32;
         let inc = inc + 1.0;
@@ -201,7 +201,7 @@ impl BigVerb {
         }
 
         BigVerb {
-            sr: sr,
+            sr,
             size: 0.93,
             cutoff: 10000.0,
             pcutoff: -1.0,
@@ -213,10 +213,9 @@ impl BigVerb {
 
     pub fn init(&mut self) {
         let mut bufpos = 0;
-        for i in 0..8 {
-            let param = PARAMS[i];
-            let bufsz = get_delay_size(&param, self.sr);
-            self.delay[i].init(bufpos, bufsz, &param, self.sr);
+        for (i, param) in PARAMS.iter().enumerate() {
+            let bufsz = get_delay_size(param, self.sr);
+            self.delay[i].init(bufpos, bufsz, param, self.sr);
             bufpos += bufsz;
         }
     }

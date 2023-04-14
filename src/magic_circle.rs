@@ -21,7 +21,7 @@ impl MagicCircleSine {
             x1: 1.0,
             x2: 0.0,
             eps: 0.0,
-            sr: sr,
+            sr,
         }
     }
 
@@ -36,8 +36,8 @@ impl MagicCircleSine {
                 (PI * (self.freq / self.sr as f32)).sin();
         }
 
-        self.x1 = self.x1 + self.eps*self.x2;
-        self.x2 = -self.eps*self.x1 + self.x2;
+        self.x1 += self.eps*self.x2;
+        self.x2 += -self.eps*self.x1;
 
         self.x2
     }
