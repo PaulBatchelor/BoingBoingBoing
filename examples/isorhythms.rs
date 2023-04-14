@@ -61,7 +61,7 @@ impl Voice {
 fn main() {
     let base = 60.0 - 4.0;
     let mut voices: [Voice; 6] = [Voice::new(SAMPLERATE); 6];
-    let mut bigverb =  boing::bigverb(SAMPLERATE);
+    let mut bigverb = boing::bigverb(SAMPLERATE);
     bigverb.init();
 
     let mut blk: [f32; 64] = [0.0; 64];
