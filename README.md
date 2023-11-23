@@ -1,7 +1,7 @@
 # Boing Boing Boing
 Audio DSP library for musical applications, written in Rust.
 
-## Roadmap (2023)
+## Roadmap
 Boing3 is still in very early development. The goal right
 now is to get it working with a similar functionality and
 scope to sndkit. This includes the set of DSP algorithms,
