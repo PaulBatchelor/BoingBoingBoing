@@ -1,6 +1,34 @@
 # Boing Boing Boing
 Audio DSP library for musical applications, written in Rust.
 
+## Building Examples
+Be sure to build the library:
+
+```
+$ cargo build
+```
+
+Build the isorhythms example:
+
+```
+$ cargo build --example isorhythms
+```
+
+Run it:
+
+```
+$ ./target/debug/examples/isorhythms
+```
+
+This will produce a file in the top-level directory
+called "out.bin", which is a raw binary file with
+32-bit floating point values. A tool like sox can be
+used to convert this raw data into a WAV file:
+
+```
+$ sox -t raw -r 44100 -e floating-point -c 1 test.bin -b 32 out.wav
+```
+
 ## Roadmap
 Boing3 is still in very early development. The goal right
 now is to get it working with a similar functionality and
