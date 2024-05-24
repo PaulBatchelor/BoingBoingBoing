@@ -61,6 +61,8 @@ fn main() {
     let base = 60.0 - 4.0;
     let mut voices: [Voice; 6] = [Voice::new(SAMPLERATE); 6];
     let mut bigverb = boing::bigverb(SAMPLERATE);
+
+    let mut wav = boing::monowav("isorhythms.wav");
     bigverb.init();
 
     let mut blk: [f32; 64] = [0.0; 64];
@@ -104,6 +106,7 @@ fn main() {
             }
             let (revl, _) = bigverb.tick(out, out);
             blk[n] = out + revl * 0.2;
+            wav.tick(blk[n]);
         }
 
         for n in 0..64 {
