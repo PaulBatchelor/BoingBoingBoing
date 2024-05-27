@@ -1,4 +1,3 @@
-
 use boingboingboing as boing;
 
 const SAMPLERATE: usize = 44100;
