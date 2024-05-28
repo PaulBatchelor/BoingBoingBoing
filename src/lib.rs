@@ -30,3 +30,8 @@ pub fn monowav(wavfilename: &str) -> monowav::MonoWav {
 pub fn phasor(sr: usize, iphs: f32) -> phasor::Phasor {
     phasor::Phasor::new(sr, iphs)
 }
+
+pub fn mtof(nn: f32) -> f32 {
+    let freq = (2.0_f32).powf((nn - 69.0) / 12.0) * 440.0;
+    freq
+}

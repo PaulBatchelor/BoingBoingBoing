@@ -8,11 +8,6 @@ use std::io::prelude::*;
 
 const SAMPLERATE: usize = 44100;
 
-fn mtof(nn: f32) -> f32 {
-    let freq = (2.0_f32).powf((nn - 69.0) / 12.0) * 440.0;
-    freq
-}
-
 #[derive(Clone, Copy)]
 pub struct Voice {
     blsaw: boing::blep::BLEP,
@@ -32,7 +27,7 @@ impl Voice {
     }
 
     pub fn pitch(&mut self, nn: f32) {
-        self.blsaw.set_freq(mtof(nn));
+        self.blsaw.set_freq(boing::mtof(nn));
     }
 
     pub fn rate(&mut self, freq: f32) {
